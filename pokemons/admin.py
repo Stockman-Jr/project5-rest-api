@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Pokemon, HeldItem, Nature
 
-# Register your models here.
+
+admin.site.register(Pokemon)
+admin.site.register(HeldItem)
+admin.site.register(Nature)
