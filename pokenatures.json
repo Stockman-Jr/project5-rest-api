@@ -1,0 +1,79 @@
+{
+  "natures":[
+  {
+    "name": "hardy"
+  },
+  {
+    "name": "bold"
+  },
+  {
+    "name": "modest"
+  },
+  {
+    "name": "calm"
+  },
+  {
+    "name": "timid"
+  },
+  {
+    "name": "lonely"
+  },
+  {
+    "name": "docile"
+  },
+  {
+    "name": "mild"
+  },
+  {
+    "name": "gentle"
+  },
+  {
+    "name": "hasty"
+  },
+  {
+    "name": "adamant"
+  },
+  {
+    "name": "impish"
+  },
+  {
+    "name": "bashful"
+  },
+  {
+    "name": "careful"
+  },
+  {
+    "name": "rash"
+  },
+  {
+    "name": "jolly"
+  },
+  {
+    "name": "naughty"
+  },
+  {
+    "name": "lax"
+  },
+  {
+    "name": "quirky"
+  },
+  {
+    "name": "naive"
+  },
+  {
+    "name": "brave"
+  },
+  {
+    "name": "relaxed"
+  },
+  {
+    "name": "quiet"
+  },
+  {
+    "name": "sassy"
+  },
+  {
+    "name": "serious"
+  }
+ ]
+}
