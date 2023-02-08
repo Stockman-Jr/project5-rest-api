@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cloudinary',
     'django_filters',
+
+    'profiles',
 ]
 
 MIDDLEWARE = [
