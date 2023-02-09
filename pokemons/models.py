@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Ability(models.Model):
@@ -45,3 +46,14 @@ class Pokemon(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class CaughtPokemon(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    pokemon = models.ForeignKey(
+        Pokemon, related_name='pokemons', on_delete=models.CASCADE
+        )
+
+    def __str__(self):
+        return f'{self.pokemon.name}'
+
