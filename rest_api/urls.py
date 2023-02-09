@@ -15,9 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from pokemons import views
+
+router = routers.DefaultRouter()
+router.register(r'pokemons', views.PokemonListView)
+router.register(r'caught', views.AddCaughtPokemonView)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include((router.urls, 'pokemons'))),
     path('', include('profiles.urls')),
-    path('', include('pokemons.urls')),
+    #path('', include('pokemons.urls')),
 ]
