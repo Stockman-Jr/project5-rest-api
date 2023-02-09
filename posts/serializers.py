@@ -1,6 +1,15 @@
 from rest_framework import serializers
-from .models import Post
+from .models import Post, PokemonBuildPost, EV_CHOICE_STATS
 from django.core.files.images import get_image_dimensions
+
+EV_CHOICE_STATS = [
+        ('hp', 'HP'),
+        ('attack', 'Attack'),
+        ('defense', 'Defense'),
+        ('special_attack', 'Special Attack'),
+        ('special_defense', 'Special Defense'),
+        ('speed', 'Speed'),
+    ]
 
 
 def image_validator(image):
@@ -48,4 +57,19 @@ class PostSerializer(serializers.ModelSerializer):
             'title', 'content', 'image', 'game_filter',
             'ingame_name',
         ]
+
+
+class PostPokeBuildSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    ev_stats = serializers.MultipleChoiceField(choices=EV_CHOICE_STATS)
+    profile_id = serializers.ReadOnlyField(source='owner.profile.id')
+    profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
+
+    class Meta:
+        model = PokemonBuildPost
+        fields = ['id', 'owner', 'profile_id', 'profile_image',
+                  'pokemon', 'created_at', 'updated_at',
+                  'move_one', 'move_two', 'move_three', 'move_four',
+                  'ability', 'held_item', 'nature', 'ev_stats',
+                  'game_filter']
 

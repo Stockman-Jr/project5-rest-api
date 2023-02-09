@@ -17,6 +17,15 @@ GAME_CHOICES = [
         ('other', 'Other'),
     ]
 
+EV_CHOICE_STATS = [
+        ('hp', 'HP'),
+        ('attack', 'Attack'),
+        ('defense', 'Defense'),
+        ('special_attack', 'Special Attack'),
+        ('special_defense', 'Special Defense'),
+        ('speed', 'Speed'),
+    ]
+
 
 class Post(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -38,15 +47,6 @@ class Post(models.Model):
 
 
 class PokemonBuildPost(models.Model):
-    ev_choice_stats = [
-        ('hp', 'HP'),
-        ('attack', 'Attack'),
-        ('defense', 'Defense'),
-        ('special_attack', 'Special Attack'),
-        ('special_defense', 'Special Defense'),
-        ('speed', 'Speed'),
-    ]
-
     owner = models.ForeignKey(
         User, on_delete=models.CASCADE, null=True, blank=True
         )
@@ -61,7 +61,7 @@ class PokemonBuildPost(models.Model):
     nature = models.ForeignKey(Nature, on_delete=models.CASCADE)
     held_item = models.ForeignKey(HeldItem, on_delete=models.CASCADE)
     ev_stats = models.CharField(
-        max_length=100, choices=ev_choice_stats, default=''
+        max_length=100, choices=EV_CHOICE_STATS, default=''
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
