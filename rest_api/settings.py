@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'profiles',
     'pokemons',
     'posts',
+    'likes',
+    'comments',
 ]
 
 MIDDLEWARE = [
