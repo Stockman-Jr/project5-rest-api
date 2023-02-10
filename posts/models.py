@@ -1,4 +1,5 @@
 from django.db import models
+from multiselectfield import MultiSelectField
 from django.contrib.auth.models import User
 from pokemons.models import CaughtPokemon, Nature, HeldItem
 
@@ -60,8 +61,8 @@ class PokemonBuildPost(models.Model):
     ability = models.CharField(max_length=100)
     nature = models.ForeignKey(Nature, on_delete=models.CASCADE)
     held_item = models.ForeignKey(HeldItem, on_delete=models.CASCADE)
-    ev_stats = models.CharField(
-        max_length=100, choices=EV_CHOICE_STATS, default=''
+    ev_stats = MultiSelectField(
+        max_length=100, max_choices=2, choices=EV_CHOICE_STATS, default=''
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

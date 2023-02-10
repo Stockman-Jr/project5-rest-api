@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'django_filters',
     'rest_framework',
+    'multiselectfield',
 
     'profiles',
     'pokemons',
