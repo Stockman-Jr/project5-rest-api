@@ -28,6 +28,6 @@ urlpatterns = [
     path('api/', include((router.urls, 'pokemons'))),
     path('', include('profiles.urls')),
     path('', include('posts.urls')),
-    #path('', include('likes.urls')),
+    path('', include('likes.urls')),
     #path('', include('comments.urls')),
 ]
