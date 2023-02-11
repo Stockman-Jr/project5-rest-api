@@ -5,11 +5,15 @@ from rest_api.permissions import IsOwnerOrReadOnly
 from .models import BasePost, Post, PokemonBuild
 from .serializers import AllPostsSerializer, PostSerializer, PokeBuildSerializer
 from likes.models import Like
+from .filters import PokeBuildGameFilter, PostGameFilter, AllPostGameFilter
 
 
 class AllPostsListView(generics.ListAPIView):
     serializer_class = AllPostsSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend,]
+
+    filterset_class = AllPostGameFilter
 
     def get_queryset(self):
         return BasePost.objects.select_subclasses()
@@ -23,6 +27,13 @@ class PostListView(generics.ListCreateAPIView):
         comments_count=Count('comment', distinct=True),
         likes_count=Count('likes', distinct=True)
     ).order_by('-created_at')
+    filter_backends = [
+        filters.OrderingFilter,
+        filters.SearchFilter,
+        DjangoFilterBackend,
+    ]
+
+    filterset_class = PostGameFilter
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -49,9 +60,10 @@ class PokeBuildListView(generics.ListCreateAPIView):
         DjangoFilterBackend,
     ]
 
+    filterset_class = PokeBuildGameFilter
+
     search_fields = [
         'owner__username',
-        'pokemon__name',
     ]
 
     ordering_fields = [
