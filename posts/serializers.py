@@ -44,4 +44,4 @@ class PokeBuildSerializer(serializers.ModelSerializer):
                   'pokemon', 'created_at', 'updated_at',
                   'move_one', 'move_two', 'move_three', 'move_four',
                   'ability', 'held_item', 'nature', 'ev_stats',
-                  'game_filter', "post_type"]
+                  'content', 'game_filter', "post_type"]

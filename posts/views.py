@@ -28,3 +28,20 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Post.objects.all()
+
+
+class PokeBuildListView(generics.ListCreateAPIView):
+
+    serializer_class = PokeBuildSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = PokemonBuild.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class PokeBuildDetailView(generics.RetrieveUpdateDestroyAPIView):
+
+    serializer_class = PokeBuildSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = PokemonBuild.objects.all()
