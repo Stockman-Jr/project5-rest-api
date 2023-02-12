@@ -1,6 +1,7 @@
 from .serializers import *
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Pokemon, CaughtPokemon
-from rest_framework import generics, permissions, viewsets
+from rest_framework import permissions, viewsets, filters
 from rest_framework.response import Response
 
 
@@ -9,11 +10,40 @@ class PokemonListView(viewsets.ModelViewSet):
     serializer_class = PokemonSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    filter_backends = [
+        filters.OrderingFilter,
+        filters.SearchFilter,
+        DjangoFilterBackend,
+    ]
+
+    search_fields = [
+        'name',
+        'types__name',
+    ]
+
+    ordering_fields = [
+        'id',
+        'name',
+    ]
+
 
 class AddCaughtPokemonView(viewsets.ModelViewSet):
     queryset = CaughtPokemon.objects.all()
     serializer_class = CaughtPokemonSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [
+        filters.OrderingFilter,
+        filters.SearchFilter,
+        DjangoFilterBackend,
+    ]
+
+    search_fields = [
+        'pokemon__name',
+    ]
+
+    def get_queryset(self):
+        user = self.request.user
+        return CaughtPokemon.objects.filter(owner=user)
 
     def create(self, request):
         user = request.user

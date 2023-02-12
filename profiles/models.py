@@ -10,7 +10,7 @@ class TrainerProfile(models.Model):
     name = models.CharField(max_length=255, blank=True)
     bio = models.TextField(blank=True)
     avatar = models.ImageField(
-        upload_to='profile_avatars/', default='../mew_avatar_z7mnbd'
+        upload_to='profile_avatars/', default='../mew_avatar_g0pjd7'
     )
 
     class Meta:

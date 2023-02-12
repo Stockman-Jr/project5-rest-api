@@ -5,6 +5,8 @@ from .models import TrainerProfile
 class TrainerProfileSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
+    posts_count = serializers.ReadOnlyField()
+    pokemons_count = serializers.ReadOnlyField()
 
     def get_is_owner(self, obj):
         request = self.context['request']
@@ -15,5 +17,5 @@ class TrainerProfileSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'owner', 'is_owner', 'created_at',
             'updated_at', 'name', 'avatar',
-            'bio', 'is_owner'
+            'bio', 'posts_count', 'pokemons_count'
         ]

@@ -25,6 +25,7 @@ router.register(r'caught', views.AddCaughtPokemonView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
     path('api/', include((router.urls, 'pokemons'))),
     path('', include('profiles.urls')),
     path('', include('posts.urls')),

@@ -16,7 +16,11 @@ class PokemonSerializer(serializers.ModelSerializer):
 
 class CaughtPokemonSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
+    pokemon_name = serializers.SerializerMethodField()
+
+    def get_pokemon_name(self, obj):
+        return str(obj.pokemon)
 
     class Meta:
         model = CaughtPokemon
-        fields = ['id', 'owner', 'pokemon']
+        fields = ['id', 'owner', 'pokemon', 'pokemon_name']
