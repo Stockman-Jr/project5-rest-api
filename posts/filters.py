@@ -22,4 +22,3 @@ class PokeBuildGameFilter(BaseGameFilter):
     class Meta:
         model = PokemonBuild
         fields = ['game_filter']
-

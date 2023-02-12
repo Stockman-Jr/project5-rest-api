@@ -53,7 +53,7 @@ class CaughtPokemon(models.Model):
     pokemon = models.ForeignKey(
         Pokemon, related_name='pokemons', on_delete=models.CASCADE
         )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.pokemon.name}'
-

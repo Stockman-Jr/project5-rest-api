@@ -37,10 +37,15 @@ class AddCaughtPokemonView(viewsets.ModelViewSet):
         DjangoFilterBackend,
     ]
 
-    search_fields = [
+    ordering_fields = [
+        'id',
         'pokemon__name',
     ]
 
+    search_fields = [
+        'pokemon__name',
+    ]
+    # .order_by('-created_at')
     def get_queryset(self):
         user = self.request.user
         return CaughtPokemon.objects.filter(owner=user)
