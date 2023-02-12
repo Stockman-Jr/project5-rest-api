@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.core.files.images import get_image_dimensions
 from .models import BasePost, Post, PokemonBuild, EV_CHOICE_STATS
 from likes.models import Like
 
@@ -8,7 +9,10 @@ class AllPostsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BasePost
-        fields = '__all__'
+        fields = ['id', 'owner',
+                  'created_at', 'updated_at',
+                  'post_type', 'game_filter'
+                  ]
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -20,6 +24,27 @@ class PostSerializer(serializers.ModelSerializer):
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
+
+    def validate_image(self, image):
+        filesize = image.size
+        width, height = get_image_dimensions(image)
+
+        max_size = 2 * 1024 * 1024
+        max_width = 3000
+        max_height = 3000
+
+        if filesize > max_size:
+            raise serializers.ValidationError(
+                    'Image size larger than 2MB!'
+                )
+        if width > max_width:
+            raise serializers.ValidationError(
+                    'Image width larger than 3000px!'
+                )
+        if height > max_height:
+            raise serializers.ValidationError(
+                    'Image height larger than 3000px!'
+                )
 
     def get_is_owner(self, obj):
         request = self.context['request']
