@@ -85,6 +85,13 @@ class PokeBuildSerializer(serializers.ModelSerializer):
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
 
+    def get_fields(self, *args, **kwargs):
+        fields = super(PokeBuildSerializer, self).get_fields(*args, **kwargs)
+        view = self.context['view']
+        owner = view.request.user
+        fields['pokemon'].queryset = fields['pokemon'].queryset.filter(owner=owner)
+        return fields
+
     def get_is_owner(self, obj):
         request = self.context['request']
         return request.user == obj.owner

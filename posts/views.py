@@ -6,6 +6,7 @@ from .models import BasePost, Post, PokemonBuild
 from .serializers import AllPostsSerializer, PostSerializer, PokeBuildSerializer
 from likes.models import Like
 from .filters import PokeBuildGameFilter, PostGameFilter, AllPostGameFilter
+from rest_framework.response import Response
 
 
 class AllPostsListView(generics.ListAPIView):
@@ -42,7 +43,7 @@ class PostListView(generics.ListCreateAPIView):
 class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     queryset = Post.objects.all()
 
 
@@ -78,5 +79,5 @@ class PokeBuildListView(generics.ListCreateAPIView):
 class PokeBuildDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = PokeBuildSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     queryset = PokemonBuild.objects.all()
