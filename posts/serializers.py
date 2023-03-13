@@ -18,8 +18,10 @@ class AllPostsSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
-    profile_id = serializers.ReadOnlyField(source='owner.profile.id')
-    profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
+    profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
+    profile_image = serializers.ReadOnlyField(
+        source='owner.trainerprofile.image.url'
+        )
     post_type = serializers.CharField(initial="Game Related")
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
@@ -50,10 +52,6 @@ class PostSerializer(serializers.ModelSerializer):
         request = self.context['request']
         return request.user == obj.owner
 
-    def get_is_owner(self, obj):
-        request = self.context['request']
-        return request.user == obj.owner
-
     def get_like_id(self, obj):
         user = self.context['request'].user
         if user.is_authenticated:
@@ -78,8 +76,10 @@ class PokeBuildSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     ev_stats = serializers.MultipleChoiceField(choices=EV_CHOICE_STATS)
-    profile_id = serializers.ReadOnlyField(source='owner.profile.id')
-    profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
+    profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
+    profile_image = serializers.ReadOnlyField(
+        source='owner.trainerprofile.image.url'
+        )
     post_type = serializers.CharField(initial="Pokémon Build")
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
@@ -89,7 +89,9 @@ class PokeBuildSerializer(serializers.ModelSerializer):
         fields = super(PokeBuildSerializer, self).get_fields(*args, **kwargs)
         view = self.context['view']
         owner = view.request.user
-        fields['pokemon'].queryset = fields['pokemon'].queryset.filter(owner=owner)
+        fields['pokemon'].queryset = fields['pokemon'].queryset.filter(
+            owner=owner
+            )
         return fields
 
     def get_is_owner(self, obj):

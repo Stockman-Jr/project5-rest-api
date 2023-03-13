@@ -8,8 +8,10 @@ class CommentSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     post = serializers.PrimaryKeyRelatedField(queryset=BasePost.objects.all())
-    profile_id = serializers.ReadOnlyField(source='owner.profile.id')
-    profile_image = serializers.ReadOnlyField(source='owner.profile.image.url')
+    profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
+    profile_image = serializers.ReadOnlyField(
+        source='owner.trainerprofile.image.url'
+        )
     created_at = serializers.SerializerMethodField()
     updated_at = serializers.SerializerMethodField()
 
