@@ -20,7 +20,7 @@ class PostSerializer(serializers.ModelSerializer):
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
     profile_image = serializers.ReadOnlyField(
-        source='owner.trainerprofile.image.url'
+        source='owner.trainerprofile.avatar.url'
         )
     post_type = serializers.CharField(initial="Game Related")
     like_id = serializers.SerializerMethodField()
@@ -78,7 +78,7 @@ class PokeBuildSerializer(serializers.ModelSerializer):
     ev_stats = serializers.MultipleChoiceField(choices=EV_CHOICE_STATS)
     profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
     profile_image = serializers.ReadOnlyField(
-        source='owner.trainerprofile.image.url'
+        source='owner.trainerprofile.avatar.url'
         )
     post_type = serializers.CharField(initial="Pokémon Build")
     like_id = serializers.SerializerMethodField()

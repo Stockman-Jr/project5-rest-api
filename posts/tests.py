@@ -105,27 +105,28 @@ class PostDetailViewTests(APITestCase):
         Post.objects.create(
             owner=brian, title='another title', content='brians content'
         )
-    
-    def test_can_retrieve_post_using_valid_id(self):
+
+    def test_can_retrieve_post_with_valid_id(self):
         response = self.client.get('/posts/post/1/')
         self.assertEqual(response.data['title'], 'test title')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_cant_retrieve_post_using_invalid_id(self):
+    def test_cant_retrieve_post_with_invalid_id(self):
         response = self.client.get('/posts/post/999/')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_user_can_update_own_post(self):
         self.client.login(username='lily', password='pass')
-        response = self.client.put('/posts/post/1/', {'title': 'update test title', 'post_type': 'Game Content'})
-        print(response.data)
+        response = self.client.put('/posts/post/1/', {
+            'title': 'update test title', 'post_type': 'Game Content'
+            })
         post = Post.objects.filter(pk=1).first()
         self.assertEqual(post.title, 'update test title')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_cant_update_another_users_post(self):
         self.client.login(username='lily', password='pass')
-        response = self.client.put('/posts/post/2/', {'title': 'update brians title', 'post_type': 'Game Content'})
+        response = self.client.put('/posts/post/2/', {
+            'title': 'update brians title', 'post_type': 'Game Content'
+            })
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-
