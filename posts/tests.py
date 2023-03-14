@@ -39,7 +39,6 @@ class PostListViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_can_list_pokemon_build_posts(self):
-        self.client.logout()
         lily = User.objects.get(username='lily')
         item = HeldItem.objects.create(name="leftovers")
         nature = Nature.objects.create(name="hardy")
@@ -82,17 +81,51 @@ class PostListViewTests(APITestCase):
         self.assertEqual(count, 1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        def test_logged_in_user_cant_create_pokemon_build(self):
-            self.client.logout()
-            response = self.client.post(
-                '/posts/pokebuild/',
-                {
-                 'pokemon': 1, 'held_item': 1, 'nature': 1,
-                 'post_type': 'Pokemon Build', 'move_one': 'slash',
-                 'move_two': 'fly', 'move_three': 'tackle',
-                 'move_four': 'calm mind', 'ability': 'ability'
-                }
-                )
-            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        # def test_logged_in_user_cant_create_pokemon_build(self):
+        #    self.client.logout()
+        #    response = self.client.post(
+        #        '/posts/pokebuild/',
+        #        {
+        #         'pokemon': 1, 'held_item': 1, 'nature': 1,
+        #         'post_type': 'Pokemon Build', 'move_one': 'slash',
+        #         'move_two': 'fly', 'move_three': 'tackle',
+        #         'move_four': 'calm mind', 'ability': 'ability'
+        #        }
+        #        )
+        #    self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class PostDetailViewTests(APITestCase):
+    def setUp(self):
+        lily = User.objects.create_user(username='lily', password='pass')
+        brian = User.objects.create_user(username='brian', password='pass')
+        Post.objects.create(
+            owner=lily, title='test title', content='lilys content'
+        )
+        Post.objects.create(
+            owner=brian, title='another title', content='brians content'
+        )
+    
+    def test_can_retrieve_post_using_valid_id(self):
+        response = self.client.get('/posts/post/1/')
+        self.assertEqual(response.data['title'], 'test title')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_cant_retrieve_post_using_invalid_id(self):
+        response = self.client.get('/posts/post/999/')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_user_can_update_own_post(self):
+        self.client.login(username='lily', password='pass')
+        response = self.client.put('/posts/post/1/', {'title': 'update test title', 'post_type': 'Game Content'})
+        print(response.data)
+        post = Post.objects.filter(pk=1).first()
+        self.assertEqual(post.title, 'update test title')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_user_cant_update_another_users_post(self):
+        self.client.login(username='lily', password='pass')
+        response = self.client.put('/posts/post/2/', {'title': 'update brians title', 'post_type': 'Game Content'})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
