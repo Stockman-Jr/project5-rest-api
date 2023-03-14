@@ -21,7 +21,6 @@ class TrainerProfileDetailViewTests(APITestCase):
     def test_can_retrieve_profile_with_valid_id(self):
         self.client.login(username='lily', password='pass')
         response = self.client.get('/profiles/1/')
-
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_can_update_own_profile(self):
@@ -33,7 +32,6 @@ class TrainerProfileDetailViewTests(APITestCase):
         })
         profile = TrainerProfile.objects.filter(pk=1).first()
         self.assertEqual(profile.name, 'lillian')
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_cant_update_another_users_profile(self):
