@@ -40,6 +40,9 @@ class BasePost(models.Model):
     )
     objects = InheritanceManager()
 
+    class Meta:
+        ordering = ['-created_at']
+
     def __str__(self):
         return f"{self.post_type} {self.id}"
 

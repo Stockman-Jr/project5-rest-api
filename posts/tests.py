@@ -8,25 +8,91 @@ from rest_framework.test import APITestCase
 class PostListViewTests(APITestCase):
 
     def setUp(self):
-        test = User.objects.create_user(username='test', password='pass')
-        self.client.login(username='test', password='pass')
+        lily = User.objects.create_user(username='lily', password='pass')
+        self.client.login(username='lily', password='pass')
         poke = Pokemon.objects.create(name="pidgey")
-        caught_pokemon = CaughtPokemon.objects.create(pokemon=poke, owner=test)
+        caught_pokemon = CaughtPokemon.objects.create(pokemon=poke, owner=lily)
+        HeldItem.objects.create(name="leftovers")
+        Nature.objects.create(name="hardy")
 
-    def test_can_list_posts(self):
-        test = User.objects.get(username='test')
-        Post.objects.create(owner=test, title='test title')
-        response = self.client.get('/posts/post/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_can_list_pokemon_build_posts(self):
-        test = User.objects.get(username='test')
+    def test_can_list_all_posts(self):
+        lily = User.objects.get(username='lily')
+        Post.objects.create(
+            owner=lily, title='test title', post_type='Game Content'
+            )
         item = HeldItem.objects.create(name="leftovers")
         nature = Nature.objects.create(name="hardy")
         caught_pokemon = CaughtPokemon.objects.get(id=1)
         PokemonBuild.objects.create(
-            owner=test, pokemon=caught_pokemon, held_item=item, nature=nature
+            owner=lily, pokemon=caught_pokemon, held_item=item,
+            nature=nature, post_type="Pokemon Build"
+            )
+        response = self.client.get('/posts/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # print(response.data)
+        # print(len(response.data))
+
+    def test_can_list_posts(self):
+        lily = User.objects.get(username='lily')
+        Post.objects.create(owner=lily, title='test title')
+        response = self.client.get('/posts/post/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_can_list_pokemon_build_posts(self):
+        self.client.logout()
+        lily = User.objects.get(username='lily')
+        item = HeldItem.objects.create(name="leftovers")
+        nature = Nature.objects.create(name="hardy")
+        caught_pokemon = CaughtPokemon.objects.get(id=1)
+        PokemonBuild.objects.create(
+            owner=lily, pokemon=caught_pokemon, held_item=item, nature=nature
             )
         response = self.client.get('/posts/pokebuild/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_logged_in_user_can_create_post(self):
+        self.client.login(username='lily', password='pass')
+        response = self.client.post(
+            '/posts/post/',
+            {'title': 'test title', 'post_type': 'Game Content'}
+            )
+        count = Post.objects.count()
+        self.assertEqual(count, 1)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_logged_out_user_cant_create_post(self):
+        self.client.logout()
+        response = self.client.post('/posts/post/', {
+            'title': 'test title', 'post_type': 'Game Content'
+            })
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_logged_in_user_can_create_pokemon_build(self):
+        self.client.login(username='lily', password='pass')
+        response = self.client.post(
+            '/posts/pokebuild/',
+            {
+             'pokemon': 1, 'held_item': 1, 'nature': 1,
+             'post_type': 'Pokemon Build', 'move_one': 'slash',
+             'move_two': 'fly', 'move_three': 'tackle',
+             'move_four': 'calm mind', 'ability': 'ability'
+             }
+            )
+        count = PokemonBuild.objects.count()
+        self.assertEqual(count, 1)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        def test_logged_in_user_cant_create_pokemon_build(self):
+            self.client.logout()
+            response = self.client.post(
+                '/posts/pokebuild/',
+                {
+                 'pokemon': 1, 'held_item': 1, 'nature': 1,
+                 'post_type': 'Pokemon Build', 'move_one': 'slash',
+                 'move_two': 'fly', 'move_three': 'tackle',
+                 'move_four': 'calm mind', 'ability': 'ability'
+                }
+                )
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
