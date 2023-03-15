@@ -62,6 +62,86 @@ The Ability, Move and Type models are connected to the Pokemon model with ManyTo
 
 Manual testing was done throughout the developement of the project to make sure the API was working as intended. This was done by creating several superusers and testing the CRUD functionality at existing endpoints.
 
+## Trainer Profiles
+
+### /profiles & <int:pk>
+
+| **Test Case**                                                 | **User Status**   | **CRUD Operation** | **Result** |
+| ------------------------------------------------------------- | ----------------- | ------------------ | ---------- |
+| All users can retrieve and read data from user profiles.      | Any               | Read               | Pass       |
+| Users that are the owner of the profile can update it.        | Profile owner     | Update             | Pass       |
+| Users that are not the owner of the profile cannot update it. | Not profile owner | Update             | Pass       |
+
+(Creation of profile is done automatically upon user instance creation and users cannot delete their profile)
+
+## Posts
+
+### /posts/
+
+| **Test Case**                                        | **User Status** | **CRUD Operation** | **Result** |
+| ---------------------------------------------------- | --------------- | ------------------ | ---------- |
+| All users can retrieve and read data from all posts. | Any             | Read               | Pass       |
+
+### /posts/post & /<int:pk>
+
+| **Test Case**                                              | **User Status** | **CRUD Operation** | **Result** |
+| ---------------------------------------------------------- | --------------- | ------------------ | ---------- |
+| Logged in users can create posts.                          | Logged in       | Create             | Pass       |
+| Logged out users cannot create posts.                      | Logged out      | Create             | Pass       |
+| All users can retrieve and read data from a single post.   | Any             | Read               | Pass       |
+| Users can access their owned posts and update them.        | Post owner      | Update             | Pass       |
+| Users cannot access posts they do not own and update them. | Not post owner  | Update             | Pass       |
+| Users can access their owned posts and delete them.        | Post owner      | Delete             | Pass       |
+| Users cannot access posts they do not own and delete them. | Not post owner  | Delete             | Pass       |
+
+### /posts/pokebuild/ & /<int:pk>
+
+| **Test Case**                                                                 | **User Status** | **CRUD Operation** | **Result** |
+| ----------------------------------------------------------------------------- | --------------- | ------------------ | ---------- |
+| Logged in users can create and share Pokémon builds.                          | Logged in       | Create             | Pass       |
+| Logged out users cannot create and share Pokémon builds.                      | Logged out      | Create             | Pass       |
+| Users that are the owner of the build can update their Pokémon builds.        | Build Owner     | Update             | Pass       |
+| Users that are not the owner of the build cannot update their Pokémon builds. | Not build Owner | Update             | Pass       |
+| Users that are the owner of the build can delete their Pokémon builds.        | Build Owner     | Delete             | Pass       |
+| Users that are not the owner of the build cannot delete their Pokémon builds. | Not build Owner | Delete             | Pass       |
+
+## Pokemons
+
+### api/pokemons/ & api/caught/
+
+| **Test Case**                                                     | **User Status** | **CRUD Operation** | **Result** |
+| ----------------------------------------------------------------- | --------------- | ------------------ | ---------- |
+| All users can retrieve and read pokémon data.                     | Any             | Read               | Pass       |
+| Logged in users can save(create) pokémons they've caught.         | Logged in       | Create             | Pass       |
+| Logged out users cannot save(create) caught pokémons.             | Logged out      | Create             | Pass       |
+| Only users that are the owner can delete pokémons they've caught. | Pokémon Owner   | Delete             | Pass       |
+
+## Likes
+
+### /likes & /<int:pk>
+
+| **Test Case**                                              | **User Status** | **CRUD Operation** | **Result** |
+| ---------------------------------------------------------- | --------------- | ------------------ | ---------- |
+| All users can retrieve and read data of likes.             | Any             | Read               | Pass       |
+| Logged in users can like a post.                           | Logged in       | Create             | Pass       |
+| Logged out users cannot like a post.                       | Logged out      | Create             | Pass       |
+| Users that are the owner of the like can delete it.        | Like Owner      | Delete             | Pass       |
+| Users that are not the owner of the like cannot delete it. | Not like Owner  | Delete             | Pass       |
+
+## Comments
+
+### /comments & /<int:pk>
+
+| **Test Case**                                                 | **User Status**   | **CRUD Operation** | **Result** |
+| ------------------------------------------------------------- | ----------------- | ------------------ | ---------- |
+| All users can retrieve and read comments data.                | Any               | Read               | Pass       |
+| Logged in users can create comments.                          | Logged in         | Create             | Pass       |
+| Logged out users cannot create comments.                      | Logged out        | Create             | Pass       |
+| Users that are the owner of the comment can update it.        | Comment Owner     | Update             | Pass       |
+| Users that are not the owner of the comment cannot update it. | Not Comment Owner | Update             | Pass       |
+| Users that are the owner of the comment can delete it.        | Comment Owner     | Delete             | Pass       |
+| Users that are not the owner of the comment cannot delete it. | Not Comment Owner | Delete             | Pass       |
+
 ## Automated Testing
 
 ---
