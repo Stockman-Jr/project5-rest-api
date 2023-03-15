@@ -1,15 +1,18 @@
 # Mew's Tavern API
 
+Mew's Tavern is a social media site created with the purpose of being a Pokémon community for fans of the franchise.
+
+User can create posts and share various game related content, which they can interact with by liking or commmenting. Users can also browse the PokéDex, where they can save pokémons they've caught to keep track of their collection.
+
+This is an API built with Django Rest Framework and serves as the backend part of the project.
+Live link can be found [here](https://pokeproject-api.herokuapp.com/).
+
 ---
 
 ## Table of Contents
 
 - [Project Links](#project-links)
-- [UX](#ux)
 - [Models & Database](#models--database)
-- [Features](#features)
-  - [Existing Features](#existing-features)
-  - [Future Features](#future-features)
 - [Testing](#testing)
   - [Manual Testing](#manual-testing)
   - [Bugs](#bugs)
@@ -25,14 +28,11 @@
 
 # Project Links
 
-This project was created with a two repositories, the separate being the frontend.
-Links to the frontend part of the project can be found in the links below:
-[Frontend Repo]()
-[Live Link]()
+This project was created with two repositories, the separate being the frontend.
+Links to the frontend parts of the project can be found in the links below:
 
----
-
-# UX
+[Frontend Repo](https://github.com/Stockman-Jr/mews-tavern)
+[Live Link](https://mews-tavern.herokuapp.com/)
 
 ---
 
@@ -43,6 +43,9 @@ This is the final outcome:
 
 ![LucidChart](/readme_assets/p5relationshipdiagram.png)
 
+
+**Pokemons Models**
+
 Additional models in the 'pokemons' app consists of Ability, Move, Type, Nature and HeldItem. They all have consist of one 'name' CharField.
 The Ability, Move and Type models are connected to the Pokemon model with ManyToMany, while Nature and HeldItem are used for the PokemonBuild model and are ForeignKeys.
 
@@ -50,9 +53,16 @@ The Ability, Move and Type models are connected to the Pokemon model with ManyTo
 - Files were created to extract the data I wanted into a JSON file, then I created BaseCommands which was used to populate my database with the JSON files that was created.
 - As I had read that the PokéAPI could be quite slow due to it's popularity, and also because I wanted to limit the Pokémon data I decided that it was better to have the data stored in my database instead of getting the data directly from its external source.
 
----
+**Posts Models**
 
-# Features
+There are three models in the posts app: BasePost, Post and PokemonBuild.
+The BasePost model was created as a parent model to Post and PokemonBuild.
+I used and InheritanceManager for the BasePost model using a library called django-model-utils.
+
+The Post model is used for creating posts that contains game related content, for example sharing screenshots or fan art.
+
+The PokemonBuild model is for creating posts where users can select from the pokémons they own  to create a build from the selected pokémon.
+
 
 ---
 
