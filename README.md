@@ -38,6 +38,18 @@ Links to the frontend part of the project can be found in the links below:
 
 # Models & Database
 
+The initial design for the database models has been modified quite a bit throughout the project, it's similar to the initial plan but some of the models was "extended".
+This is the final outcome:
+
+![LucidChart](/readme_assets/p5relationshipdiagram.png)
+
+Additional models in the 'pokemons' app consists of Ability, Move, Type, Nature and HeldItem. They all have consist of one 'name' CharField.
+The Ability, Move and Type models are connected to the Pokemon model with ManyToMany, while Nature and HeldItem are used for the PokemonBuild model and are ForeignKeys.
+
+- All data in the Pokemon model was extracted from an external API, PokéAPI.
+- Files were created to extract the data I wanted into a JSON file, then I created BaseCommands which was used to populate my database with the JSON files that was created.
+- As I had read that the PokéAPI could be quite slow due to it's popularity, and also because I wanted to limit the Pokémon data I decided that it was better to have the data stored in my database instead of getting the data directly from its external source.
+
 ---
 
 # Features
