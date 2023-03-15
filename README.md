@@ -188,3 +188,15 @@ This will allow you do whatever you want without altering the original.
 
 ## Credits
 
+### Code
+
+- [PokéAPI](https://pokeapi.co/) - Used to get the Pokémon data.
+- [Stackoverflow](https://stackoverflow.com/) - Stackoverflow was used in abundance as usual when looking for solutions and fixes.
+- [Code Institute](https://github.com/Code-Institute-Solutions/drf-api/tree/ed54af9450e64d71bc4ecf16af0c35d00829a106) - The moments walkthrough project was used as a base reference for this project.
+- **Github Repositories**
+  - Code from these repositories was used as an inspiration to create the pokemons app.
+    - [Project Pokemon](https://github.com/jpozzo5/project_pokemon-) - Created by jpozzo5@github. I specifically looked at this projects pokemon models and command files so that I could populate my database.
+    - [Pokemon Capstone Backend](https://github.com/r-o-e-574/pokemon-capstone-backend/tree/62a8ac26896a4c66cf972b44e10c4a072dc39729) - Created by r-o-e-574@github.
+    - [Dexapp API](https://github.com/ninjaguydan/dexapp_API) - Created by ninjaguydan@github.
+
+
