@@ -1,6 +1,7 @@
 from .serializers import *
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_api.permissions import IsOwnerOrReadOnly
+from rest_api.pagination import CustomPagination
 from .models import Pokemon, CaughtPokemon
 from rest_framework import permissions, viewsets, filters
 from rest_framework.response import Response
@@ -9,6 +10,7 @@ from rest_framework.response import Response
 class PokemonListView(viewsets.ModelViewSet):
     queryset = Pokemon.objects.all()
     serializer_class = PokemonSerializer
+    pagination_class = CustomPagination
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     filter_backends = [
@@ -47,9 +49,9 @@ class AddCaughtPokemonView(viewsets.ModelViewSet):
         'pokemon__name',
     ]
 
-    # def get_queryset(self):
-    #    user = self.request.user
-    #    return CaughtPokemon.objects.filter(owner=user).order_by('-created_at')
+    def get_queryset(self):
+        user = self.request.user
+        return CaughtPokemon.objects.filter(owner=user).order_by('-created_at')
 
     def create(self, request):
         user = request.user

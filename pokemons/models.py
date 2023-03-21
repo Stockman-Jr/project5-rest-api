@@ -44,6 +44,9 @@ class Pokemon(models.Model):
     abilities = models.ManyToManyField(Ability, related_name='abilities')
     moves = models.ManyToManyField(Move, related_name='moves')
 
+    class Meta:
+        ordering = ['id']
+
     def __str__(self):
         return f'{self.name}'
 
