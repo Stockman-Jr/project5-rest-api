@@ -70,9 +70,9 @@ class AddCaughtPokemonView(viewsets.ModelViewSet):
 
         return super(AddCaughtPokemonView, self).get_serializer_class()
 
-    def get_queryset(self):
-        user = self.request.user
-        return CaughtPokemon.objects.filter(owner=user).order_by('-created_at')
+    #def get_queryset(self):
+    #    user = self.request.user
+    #    return CaughtPokemon.objects.filter(owner=user).order_by('-created_at')
 
     def create(self, request):
         user = request.user
