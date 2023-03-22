@@ -36,6 +36,11 @@ class PostListView(generics.ListCreateAPIView):
 
     filterset_class = PostGameFilter
 
+    filterset_fields = [
+        'owner__trainerprofile',
+        'likes_count',
+    ]
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -62,6 +67,11 @@ class PokeBuildListView(generics.ListCreateAPIView):
     ]
 
     filterset_class = PokeBuildGameFilter
+
+    filterset_fields = [
+        'owner__trainerprofile',
+        'likes_count',
+    ]
 
     search_fields = [
         'owner__username',

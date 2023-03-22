@@ -34,20 +34,41 @@ class AddCaughtPokemonView(viewsets.ModelViewSet):
     queryset = CaughtPokemon.objects.all()
     serializer_class = CaughtPokemonSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    action_serializers = {
+        'retrieve': CaughtPokemonDetailSerializer,
+        'list': CaughtPokemonSerializer,
+        'create': CaughtPokemonSerializer
+    }
     filter_backends = [
         filters.OrderingFilter,
         filters.SearchFilter,
         DjangoFilterBackend,
     ]
 
+    filterset_fields = [
+        'owner',
+        'owner__trainerprofile',
+        'pokemon__id',
+    ]
+
     ordering_fields = [
         'id',
+        'owner',
         'pokemon__name',
     ]
 
     search_fields = [
         'pokemon__name',
     ]
+
+    def get_serializer_class(self):
+
+        if hasattr(self, 'action_serializers'):
+            return self.action_serializers.get(
+                self.action, self.serializer_class
+                )
+
+        return super(AddCaughtPokemonView, self).get_serializer_class()
 
     def get_queryset(self):
         user = self.request.user
