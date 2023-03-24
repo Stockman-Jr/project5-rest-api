@@ -1,5 +1,17 @@
 from rest_framework import serializers
-from .models import Pokemon, CaughtPokemon
+from .models import Pokemon, CaughtPokemon, Nature, HeldItem
+
+
+class HeldItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HeldItem
+        fields = ['id', 'name']
+
+
+class NatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nature
+        fields = ['id', 'name']
 
 
 class PokemonSerializer(serializers.ModelSerializer):

@@ -20,8 +20,10 @@ from pokemons import views
 from .views import root_route, logout_route
 
 router = routers.DefaultRouter()
-router.register(r'pokemons', views.PokemonListView)
+router.register(r'pokemons', views.PokemonViewSet)
 router.register(r'caught', views.AddCaughtPokemonView)
+router.register(r'natures', views.NatureViewSet)
+router.register(r'held-items', views.HeldItemViewSet)
 
 
 urlpatterns = [
