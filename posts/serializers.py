@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.core.files.images import get_image_dimensions
-from .models import BasePost, Post, PokemonBuild, EV_CHOICE_STATS
+from .models import BasePost, Post, PokemonBuild, EV_CHOICE_STATS, GAME_CHOICES
 from likes.models import Like
 
 
@@ -26,6 +26,10 @@ class PostSerializer(serializers.ModelSerializer):
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
+    game_filter_display = serializers.CharField(
+        source='get_game_filter_display',
+        read_only=True
+        )
 
     def validate_image(self, image):
         filesize = image.size
@@ -69,7 +73,7 @@ class PostSerializer(serializers.ModelSerializer):
             'profile_image', 'created_at', 'updated_at',
             'title', 'content', 'image', 'game_filter',
             'ingame_name', "post_type", 'likes_count',
-            'like_id', 'comments_count'
+            'like_id', 'comments_count', 'game_filter_display',
         ]
 
 
@@ -85,6 +89,10 @@ class PokeBuildSerializer(serializers.ModelSerializer):
     like_id = serializers.SerializerMethodField()
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
+    game_filter_display = serializers.CharField(
+        source='get_game_filter_display',
+        read_only=True
+        )
 
     def get_fields(self, *args, **kwargs):
         fields = super(PokeBuildSerializer, self).get_fields(*args, **kwargs)
@@ -115,4 +123,5 @@ class PokeBuildSerializer(serializers.ModelSerializer):
                   'move_one', 'move_two', 'move_three', 'move_four',
                   'ability', 'held_item', 'nature', 'ev_stats',
                   'content', 'game_filter', "post_type",
-                  'likes_count', 'like_id', 'comments_count']
+                  'likes_count', 'like_id', 'comments_count',
+                  'game_filter_display',]
