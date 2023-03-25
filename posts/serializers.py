@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.core.files.images import get_image_dimensions
 from .models import BasePost, Post, PokemonBuild, EV_CHOICE_STATS, GAME_CHOICES
+from pokemons.models import Pokemon
 from likes.models import Like
 
 
@@ -115,6 +116,13 @@ class PokeBuildSerializer(serializers.ModelSerializer):
             ).first()
             return like.id if like else None
         return None
+
+    def to_representation(self, instance):
+        ret = super(PokeBuildSerializer, self).to_representation(instance)
+        ret['pokemon'] = instance.pokemon.pokemon.name
+        ret['held_item'] = instance.held_item.name
+        ret['nature'] = instance.nature.name
+        return ret
 
     class Meta:
         model = PokemonBuild
