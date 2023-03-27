@@ -6,6 +6,6 @@ urlpatterns = [
     path('posts/post/', views.PostListView.as_view()),
     path('posts/post/<int:pk>/', views.PostDetailView.as_view()),
     path('posts/pokebuild/', views.PokeBuildListView.as_view()),
-    path('posts/pokebuild/<int:pk>', views.PokeBuildDetailView.as_view()),
+    path('posts/pokebuild/<int:pk>/', views.PokeBuildDetailView.as_view()),
 
 ]
