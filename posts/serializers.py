@@ -88,6 +88,7 @@ class PokeBuildSerializer(serializers.ModelSerializer):
         )
     post_type = serializers.CharField(initial="Pokémon Build")
     like_id = serializers.SerializerMethodField()
+    caught_id = serializers.ReadOnlyField(source='pokemon.id')
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
     game_filter_display = serializers.CharField(
@@ -97,11 +98,11 @@ class PokeBuildSerializer(serializers.ModelSerializer):
 
     def get_fields(self, *args, **kwargs):
         fields = super(PokeBuildSerializer, self).get_fields(*args, **kwargs)
-        view = self.context['view']
-        owner = view.request.user
-        fields['pokemon'].queryset = fields['pokemon'].queryset.filter(
-            owner=owner
-            )
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            fields['pokemon'].queryset = fields['pokemon'].queryset.filter(
+                owner=request.user
+                )
         return fields
 
     def get_is_owner(self, obj):
@@ -132,4 +133,4 @@ class PokeBuildSerializer(serializers.ModelSerializer):
                   'ability', 'held_item', 'nature', 'ev_stats',
                   'content', 'game_filter', "post_type",
                   'likes_count', 'like_id', 'comments_count',
-                  'game_filter_display',]
+                  'game_filter_display', 'caught_id']
