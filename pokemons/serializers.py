@@ -26,44 +26,25 @@ class PokemonSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CaughtPokemonDetailSerializer(serializers.ModelSerializer):
+class CaughtPokemonCreateSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
-    is_owner = serializers.SerializerMethodField()
-    profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
-    profile_image = serializers.ReadOnlyField(
-        source='owner.trainerprofile.avatar.url'
-        )
-    pokemon = PokemonSerializer()
-
-    def get_is_owner(self, obj):
-        request = self.context['request']
-        return request.user == obj.owner
 
     class Meta:
         model = CaughtPokemon
-        fields = ['id', 'owner', 'profile_id', 'is_owner',
-                  'profile_image', 'pokemon']
-        depth = 1
+        fields = ['id', 'owner', 'pokemon']
 
 
 class CaughtPokemonSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
-    is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
-    profile_image = serializers.ReadOnlyField(
+    profile_avatar = serializers.ReadOnlyField(
         source='owner.trainerprofile.avatar.url'
         )
-    pokemon_name = serializers.SerializerMethodField()
-
-    def get_is_owner(self, obj):
-        request = self.context['request']
-        return request.user == obj.owner
-
-    def get_pokemon_name(self, obj):
-        return str(obj.pokemon)
+    pokemon = PokemonSerializer()
 
     class Meta:
         model = CaughtPokemon
-        fields = ['id', 'owner', 'profile_id', 'is_owner',
-                  'profile_image', 'pokemon', 'pokemon_name'
+        fields = ['id', 'owner', 'profile_id',
+                  'profile_avatar', 'pokemon', 'created_at'
                   ]
+        depth = 1

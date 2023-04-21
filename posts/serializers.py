@@ -99,6 +99,7 @@ class PokeBuildSerializer(serializers.ModelSerializer):
     post_type = serializers.CharField(initial="Pokémon Build")
     like_id = serializers.SerializerMethodField()
     pokemon_id = serializers.ReadOnlyField(source='pokemon.pokemon.id')
+    pokemon_sprite = serializers.ReadOnlyField(source='pokemon.pokemon.sprite')
     caught_id = serializers.ReadOnlyField(source='pokemon.id')
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
@@ -160,7 +161,8 @@ class PokeBuildSerializer(serializers.ModelSerializer):
                   'ability', 'held_item', 'nature', 'ev_stats',
                   'content', 'game_filter', "post_type",
                   'likes_count', 'like_id', 'comments_count',
-                  'game_filter_display', 'caught_id', 'pokemon_id']
+                  'game_filter_display', 'caught_id', 'pokemon_id',
+                   'pokemon_sprite']
 
 
 class AllPostsSerializer(serializers.Serializer):
