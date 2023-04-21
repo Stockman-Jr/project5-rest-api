@@ -65,15 +65,15 @@ class PostSerializer(serializers.ModelSerializer):
         return image
 
     def get_is_owner(self, obj):
-        request = self.context['request']
-        return request.user == obj.owner
+        request = self.context.get('request')
+        if request:
+            return request.user == obj.owner
+        return False
 
     def get_like_id(self, obj):
-        user = self.context['request'].user
-        if user.is_authenticated:
-            like = Like.objects.filter(
-                owner=user, post=obj
-            ).first()
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            like = Like.objects.filter(owner=request.user, post=obj).first()
             return like.id if like else None
         return None
 
@@ -117,15 +117,15 @@ class PokeBuildSerializer(serializers.ModelSerializer):
         return fields
 
     def get_is_owner(self, obj):
-        request = self.context['request']
-        return request.user == obj.owner
+        request = self.context.get('request')
+        if request:
+            return request.user == obj.owner
+        return False
 
     def get_like_id(self, obj):
-        user = self.context['request'].user
-        if user.is_authenticated:
-            like = Like.objects.filter(
-                owner=user, post=obj
-            ).first()
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            like = Like.objects.filter(owner=request.user, post=obj).first()
             return like.id if like else None
         return None
 
