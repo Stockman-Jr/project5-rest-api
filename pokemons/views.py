@@ -1,10 +1,27 @@
 from .serializers import *
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import (
+    DjangoFilterBackend, FilterSet, CharFilter
+    )
 from rest_api.permissions import IsOwnerOrReadOnly
 from rest_api.pagination import CustomPokemonPagination
 from .models import Pokemon, CaughtPokemon, Nature, HeldItem
 from rest_framework import permissions, viewsets, filters
 from rest_framework.response import Response
+
+
+class CustomPokemonFilter(FilterSet):
+    uncaught_pokemons = CharFilter(
+        method='filter_uncaught_pokemons', lookup_expr='exact'
+        )
+
+    class Meta:
+        model = Pokemon
+        fields = ('uncaught_pokemons', 'types__name', 'pokemons__owner')
+
+    def filter_uncaught_pokemons(self, queryset, name, value):
+        if value.lower() == 'true' and self.request.user.is_authenticated:
+            return queryset.filter(pokemons__owner__isnull=True)
+        return queryset
 
 
 class NatureViewSet(viewsets.ModelViewSet):
@@ -30,6 +47,7 @@ class PokemonViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
         DjangoFilterBackend,
     ]
+    filterset_class = CustomPokemonFilter
 
     search_fields = [
         'name',
