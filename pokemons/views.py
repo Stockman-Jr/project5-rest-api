@@ -43,14 +43,9 @@ class PokemonViewSet(viewsets.ModelViewSet):
 
 
 class AddCaughtPokemonView(viewsets.ModelViewSet):
-    queryset = CaughtPokemon.objects.all()
+    queryset = CaughtPokemon.objects.all().order_by('-created_at')
     serializer_class = CaughtPokemonSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    action_serializers = {
-        'retrieve': CaughtPokemonDetailSerializer,
-        'list': CaughtPokemonSerializer,
-        'create': CaughtPokemonSerializer
-    }
     filter_backends = [
         filters.OrderingFilter,
         filters.SearchFilter,
@@ -73,19 +68,22 @@ class AddCaughtPokemonView(viewsets.ModelViewSet):
         'pokemon__name',
     ]
 
+    def get_permissions(self):
+        if self.request.method == 'DELETE':
+            self.permission_classes = [IsOwnerOrReadOnly, ]
+        else:
+            self.permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
+        return super(AddCaughtPokemonView, self).get_permissions()
+
     def get_serializer_class(self):
-
-        if hasattr(self, 'action_serializers'):
-            return self.action_serializers.get(
-                self.action, self.serializer_class
-                )
-
-        return super(AddCaughtPokemonView, self).get_serializer_class()
+        if self.action == 'create':
+            return CaughtPokemonCreateSerializer
+        return super().get_serializer_class()
 
     def create(self, request):
         user = request.user
         pokemon = Pokemon.objects.get(pk=request.data['pokemon'])
-        serializer = CaughtPokemonSerializer(data=request.data)
+        serializer = CaughtPokemonCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(owner=user, pokemon=pokemon)
         return Response(serializer.data)
