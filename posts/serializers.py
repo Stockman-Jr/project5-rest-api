@@ -5,15 +5,25 @@ from pokemons.models import Pokemon
 from likes.models import Like
 
 
-class AllPostsSerializer(serializers.ModelSerializer):
+class BasePostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
+    post_category = serializers.SerializerMethodField()
 
     class Meta:
         model = BasePost
-        fields = ['id', 'owner',
+        fields = ['id', 'owner', 'content',
                   'created_at', 'updated_at',
-                  'post_type', 'game_filter'
+                  'post_type', 'game_filter',
+                  'post_category'
                   ]
+
+    def get_post_category(self, obj):
+        if isinstance(obj, Post):
+            return 'post'
+        elif isinstance(obj, PokemonBuild):
+            return 'pokemon_build'
+        else:
+            return ''
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -88,6 +98,7 @@ class PokeBuildSerializer(serializers.ModelSerializer):
         )
     post_type = serializers.CharField(initial="Pokémon Build")
     like_id = serializers.SerializerMethodField()
+    pokemon_id = serializers.ReadOnlyField(source='pokemon.pokemon.id')
     caught_id = serializers.ReadOnlyField(source='pokemon.id')
     likes_count = serializers.ReadOnlyField()
     comments_count = serializers.ReadOnlyField()
@@ -118,6 +129,22 @@ class PokeBuildSerializer(serializers.ModelSerializer):
             return like.id if like else None
         return None
 
+    def to_internal_value(self, data):
+        mutable_data = data.copy()
+        try:
+            mutable_data['held_item'] = HeldItem.objects.get(
+                name=mutable_data['held_item']
+                ).pk
+        except HeldItem.DoesNotExist:
+            pass
+        try:
+            mutable_data['nature'] = Nature.objects.get(
+                name=mutable_data['nature']
+                ).pk
+        except Nature.DoesNotExist:
+            pass
+        return super().to_internal_value(mutable_data)
+
     def to_representation(self, instance):
         ret = super(PokeBuildSerializer, self).to_representation(instance)
         ret['pokemon'] = instance.pokemon.pokemon.name
@@ -133,4 +160,30 @@ class PokeBuildSerializer(serializers.ModelSerializer):
                   'ability', 'held_item', 'nature', 'ev_stats',
                   'content', 'game_filter', "post_type",
                   'likes_count', 'like_id', 'comments_count',
-                  'game_filter_display', 'caught_id']
+                  'game_filter_display', 'caught_id', 'pokemon_id']
+
+
+class AllPostsSerializer(serializers.Serializer):
+
+    def to_representation(self, obj):
+        if isinstance(obj, Post):
+            serializer = PostSerializer(obj)
+        elif isinstance(obj, PokemonBuild):
+            serializer = PokeBuildSerializer(obj)
+        else:
+            serializer = BasePostSerializer(obj)
+ 
+        data = serializer.data
+
+        if self.context['request'].user.is_authenticated:
+            owner = self.context['request'].user
+            post = obj
+            try:
+                like = Like.objects.get(owner=owner, post=post)
+                data['like_id'] = like.id
+            except Like.DoesNotExist:
+                data['like_id'] = None
+        else:
+            data['like_id'] = None
+
+        return data
