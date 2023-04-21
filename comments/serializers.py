@@ -9,7 +9,7 @@ class CommentSerializer(serializers.ModelSerializer):
     is_owner = serializers.SerializerMethodField()
     post = serializers.PrimaryKeyRelatedField(queryset=BasePost.objects.all())
     profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
-    profile_image = serializers.ReadOnlyField(
+    profile_avatar = serializers.ReadOnlyField(
         source='owner.trainerprofile.image.url'
         )
     created_at = serializers.SerializerMethodField()
@@ -29,7 +29,7 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = [
             'id', 'owner', 'is_owner', 'profile_id',
-            'profile_image', 'created_at', 'updated_at',
+            'profile_avatar', 'created_at', 'updated_at',
             'post', 'content'
         ]
 

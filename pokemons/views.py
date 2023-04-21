@@ -10,6 +10,9 @@ from rest_framework.response import Response
 
 
 class CustomPokemonFilter(FilterSet):
+    """
+    Filter by pokemon types and pokemons that are caught by specified owner.
+    """
     uncaught_pokemons = CharFilter(
         method='filter_uncaught_pokemons', lookup_expr='exact'
         )
@@ -24,20 +27,20 @@ class CustomPokemonFilter(FilterSet):
         return queryset
 
 
-class NatureViewSet(viewsets.ModelViewSet):
-    queryset = Nature.objects.all()
+class NatureViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Nature.objects.all().order_by('id')
     serializer_class = NatureSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class HeldItemViewSet(viewsets.ModelViewSet):
-    queryset = HeldItem.objects.all()
+class HeldItemViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = HeldItem.objects.all().order_by('id')
     serializer_class = HeldItemSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class PokemonViewSet(viewsets.ModelViewSet):
-    queryset = Pokemon.objects.all()
+    queryset = Pokemon.objects.all().order_by('id')
     serializer_class = PokemonSerializer
     pagination_class = CustomPokemonPagination
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]

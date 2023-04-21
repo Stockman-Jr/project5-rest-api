@@ -30,7 +30,7 @@ class PostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
-    profile_image = serializers.ReadOnlyField(
+    profile_avatar = serializers.ReadOnlyField(
         source='owner.trainerprofile.avatar.url'
         )
     post_type = serializers.CharField(initial="Game Related")
@@ -81,7 +81,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = [
             'id', 'owner', 'profile_id', 'is_owner',
-            'profile_image', 'created_at', 'updated_at',
+            'profile_avatar', 'created_at', 'updated_at',
             'title', 'content', 'image', 'game_filter',
             'ingame_name', "post_type", 'likes_count',
             'like_id', 'comments_count', 'game_filter_display',
@@ -93,7 +93,7 @@ class PokeBuildSerializer(serializers.ModelSerializer):
     is_owner = serializers.SerializerMethodField()
     ev_stats = serializers.MultipleChoiceField(choices=EV_CHOICE_STATS)
     profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
-    profile_image = serializers.ReadOnlyField(
+    profile_avatar = serializers.ReadOnlyField(
         source='owner.trainerprofile.avatar.url'
         )
     post_type = serializers.CharField(initial="Pokémon Build")
@@ -156,13 +156,13 @@ class PokeBuildSerializer(serializers.ModelSerializer):
     class Meta:
         model = PokemonBuild
         fields = ['id', 'owner', 'is_owner', 'profile_id',
-                  'profile_image', 'pokemon', 'created_at', 'updated_at',
+                  'profile_avatar', 'pokemon', 'created_at', 'updated_at',
                   'move_one', 'move_two', 'move_three', 'move_four',
                   'ability', 'held_item', 'nature', 'ev_stats',
                   'content', 'game_filter', "post_type",
                   'likes_count', 'like_id', 'comments_count',
                   'game_filter_display', 'caught_id', 'pokemon_id',
-                   'pokemon_sprite']
+                  'pokemon_sprite']
 
 
 class AllPostsSerializer(serializers.Serializer):

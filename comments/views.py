@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_api.permissions import IsOwnerOrReadOnly
+from rest_api.pagination import CustomCommentPagination
 from .models import Comment
 from .serializers import CommentSerializer, CommentDetailSerializer
 
@@ -9,6 +10,7 @@ class CommentList(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Comment.objects.all()
+    pagination_class = CustomCommentPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['post']
 
