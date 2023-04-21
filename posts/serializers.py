@@ -172,7 +172,7 @@ class AllPostsSerializer(serializers.Serializer):
             serializer = PokeBuildSerializer(obj)
         else:
             serializer = BasePostSerializer(obj)
- 
+
         data = serializer.data
 
         if self.context['request'].user.is_authenticated:
@@ -185,5 +185,4 @@ class AllPostsSerializer(serializers.Serializer):
                 data['like_id'] = None
         else:
             data['like_id'] = None
-
         return data

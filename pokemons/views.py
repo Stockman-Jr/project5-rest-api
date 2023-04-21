@@ -1,7 +1,7 @@
 from .serializers import *
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_api.permissions import IsOwnerOrReadOnly
-from rest_api.pagination import CustomPagination
+from rest_api.pagination import CustomPokemonPagination
 from .models import Pokemon, CaughtPokemon, Nature, HeldItem
 from rest_framework import permissions, viewsets, filters
 from rest_framework.response import Response
@@ -22,7 +22,7 @@ class HeldItemViewSet(viewsets.ModelViewSet):
 class PokemonViewSet(viewsets.ModelViewSet):
     queryset = Pokemon.objects.all()
     serializer_class = PokemonSerializer
-    pagination_class = CustomPagination
+    pagination_class = CustomPokemonPagination
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     filter_backends = [

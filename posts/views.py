@@ -3,7 +3,7 @@ from rest_framework import generics, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_api.permissions import IsOwnerOrReadOnly
 from .models import BasePost, Post, PokemonBuild
-from .serializers import AllPostsSerializer, PostSerializer, PokeBuildSerializer
+from .serializers import *
 from likes.models import Like
 from .filters import PokeBuildGameFilter, PostGameFilter, AllPostGameFilter
 from rest_framework.response import Response
