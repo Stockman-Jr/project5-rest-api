@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 for i in moves_obj.filter(name=move):
                     moves_id.append(i)
         return moves_id
-    
+
     def get_or_create_types(self, types):
         types_obj = Type.objects
         types_id = []

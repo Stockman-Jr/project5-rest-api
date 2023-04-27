@@ -48,6 +48,7 @@ class AllPostsListView(generics.ListAPIView):
 
     search_fields = [
         'game_filter',
+        'owner__username',
     ]
 
     def get_queryset(self):
