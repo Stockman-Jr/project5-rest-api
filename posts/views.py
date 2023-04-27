@@ -93,7 +93,10 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = PostSerializer
     permission_classes = [IsOwnerOrReadOnly]
-    queryset = Post.objects.all()
+    queryset = Post.objects.annotate(
+        comments_count=Count('comment', distinct=True),
+        likes_count=Count('likes', distinct=True)
+    )
 
 
 class PokeBuildListView(generics.ListCreateAPIView):
