@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.core.files.images import get_image_dimensions
 from .models import BasePost, Post, PokemonBuild, EV_CHOICE_STATS, GAME_CHOICES
-from pokemons.models import Pokemon
+from pokemons.models import Pokemon, HeldItem, Nature
 from likes.models import Like
 
 
