@@ -110,6 +110,10 @@ class PokeBuildSerializer(serializers.ModelSerializer):
         )
 
     def get_fields(self, *args, **kwargs):
+        """
+        Limits the choices of pokemon field to only contain
+        pokemons that the current user is the owner of.
+        """
         fields = super(PokeBuildSerializer, self).get_fields(*args, **kwargs)
         request = self.context.get('request')
         if request and request.user.is_authenticated:
@@ -119,17 +123,24 @@ class PokeBuildSerializer(serializers.ModelSerializer):
         return fields
 
     def validate(self, data):
+        """
+        Custom error handling.
+        Checks that the move fields does not contain identical values,
+        and that the ev_stats need two values to be returned
+        """
         move_fields = ['move_one', 'move_two', 'move_three', 'move_four']
         moves = [data[field] for field in move_fields if field in data]
 
         if len(set(moves)) != len(moves):
-            raise serializers.ValidationError(
-                "Four unique moves must be selected."
-                )
+            raise serializers.ValidationError({
+                "moves": ["Four unique moves must be selected."]
+                })
 
         ev_stats = data.get('ev_stats', [])
         if len(ev_stats) != 2:
-            raise serializers.ValidationError("Two EV stats must be selected.")
+            raise serializers.ValidationError({
+                "ev_stats": ["Two EV stats must be selected."]
+                })
         return data
 
     def get_is_owner(self, obj):
@@ -146,6 +157,11 @@ class PokeBuildSerializer(serializers.ModelSerializer):
         return None
 
     def to_internal_value(self, data):
+        """
+        Converts a string representation of a held_item and a nature
+        to their corresponding primary keys, if they exist,
+        in order to be stored in the database 
+        """
         mutable_data = data.copy()
         try:
             mutable_data['held_item'] = HeldItem.objects.get(
@@ -162,6 +178,10 @@ class PokeBuildSerializer(serializers.ModelSerializer):
         return super().to_internal_value(mutable_data)
 
     def to_representation(self, instance):
+        """
+        Allows the name of these instances to be displayed
+        instead of ids
+        """
         ret = super(PokeBuildSerializer, self).to_representation(instance)
         ret['pokemon'] = instance.pokemon.pokemon.name
         ret['held_item'] = instance.held_item.name

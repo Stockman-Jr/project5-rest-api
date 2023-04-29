@@ -30,6 +30,7 @@ class CustomPostFilter(FilterSet):
 
 
 class AllPostsListView(generics.ListAPIView):
+
     serializer_class = AllPostsSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = CustomPostPagination
