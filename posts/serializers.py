@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from django.core.files.images import get_image_dimensions
 from .models import BasePost, Post, PokemonBuild, EV_CHOICE_STATS, GAME_CHOICES
 from pokemons.models import Pokemon, HeldItem, Nature
@@ -116,6 +117,20 @@ class PokeBuildSerializer(serializers.ModelSerializer):
                 owner=request.user
                 )
         return fields
+
+    def validate(self, data):
+        move_fields = ['move_one', 'move_two', 'move_three', 'move_four']
+        moves = [data[field] for field in move_fields if field in data]
+
+        if len(set(moves)) != len(moves):
+            raise serializers.ValidationError(
+                "Four unique moves must be selected."
+                )
+
+        ev_stats = data.get('ev_stats', [])
+        if len(ev_stats) != 2:
+            raise serializers.ValidationError("Two EV stats must be selected.")
+        return data
 
     def get_is_owner(self, obj):
         request = self.context.get('request')
