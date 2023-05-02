@@ -175,7 +175,19 @@ Manual testing was done throughout the developement of the project to make sure 
 
 ## Deployment
 
-This project was deployed with Heroku, following the steps of Code Institute's [deployment cheatsheet](https://docs.google.com/document/d/1v8mOyB5l7aSL5loy3MVIX4z4SsLYKe-ZEGGpT_Z5DRM/edit#).
+This project was deployed using heroku, steps to deployment are as follows:
+  * Sign up to heroku if you haven't, then check for a button labelled "New" at the top right of the dashboard.
+    * Click that button to display a dropdown menu and select "Create New App".
+    * This will take you to a new page, where you can enter your region and choose a name for your new app, which must be unique. Then click "Create App"
+  
+  * On the next page, navigate to the "Settings" tab on the menu, and find the section called "Config Vars"
+  * Click on the button labelled "Config Vars" and add necessary values for these keys:
+      * CLOUDINARY_URL, DATABASE_URL, ALLOWED_HOST, CLIENT_ORIGIN, CLIENT_ORIGIN_DEV and SECRET_KEY
+
+  * Scroll back to the top menu and click the "Deploy" tab.
+    * Here you'll have some options for deployment, I used github for this.
+    * Once you've clicked on the Github button you will be able to search for your Github repository and connect to it.
+    * Once connected, it's time to deploy. You can choose to deploy automatically or manually, I chose automatic deploys for this project.
 
 ### Forking and cloning
 
