@@ -63,7 +63,6 @@ class PokemonViewSet(viewsets.ModelViewSet):
 class AddCaughtPokemonView(viewsets.ModelViewSet):
     queryset = CaughtPokemon.objects.all().order_by('-created_at')
     serializer_class = CaughtPokemonSerializer
-    pagination_class = CustomPokemonPagination
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [
         filters.OrderingFilter,
