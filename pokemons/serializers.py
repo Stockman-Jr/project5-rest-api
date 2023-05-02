@@ -26,25 +26,38 @@ class PokemonSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PokemonListSerializer(serializers.ModelSerializer):
+    name = serializers.StringRelatedField()
+    types = serializers.StringRelatedField(many=True, read_only=True)
+    sprite = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Pokemon
+        fields = ['id', 'name', 'sprite', 'types']
+
+
 class CaughtPokemonCreateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CaughtPokemon
+        fields = ['id', 'pokemon']
+
+
+class CaughtPokemonDetailSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
+    pokemon = PokemonSerializer()
 
     class Meta:
         model = CaughtPokemon
         fields = ['id', 'owner', 'pokemon']
+        depth = 1
 
 
 class CaughtPokemonSerializer(serializers.ModelSerializer):
     owner = serializers.CharField(source='owner.username', read_only=True)
     profile_id = serializers.ReadOnlyField(source='owner.trainerprofile.id')
-    profile_avatar = serializers.ReadOnlyField(
-        source='owner.trainerprofile.avatar.url'
-        )
-    pokemon = PokemonSerializer()
+    pokemon = PokemonListSerializer()
 
     class Meta:
         model = CaughtPokemon
-        fields = ['id', 'owner', 'profile_id',
-                  'profile_avatar', 'pokemon', 'created_at'
-                  ]
-        depth = 1
+        fields = ['id', 'owner', 'profile_id', 'pokemon', 'created_at']
