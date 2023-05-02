@@ -93,6 +93,13 @@ class AddCaughtPokemonView(viewsets.ModelViewSet):
             self.permission_classes = [permissions.IsAuthenticatedOrReadOnly, ]
         return super(AddCaughtPokemonView, self).get_permissions()
 
+    def get_queryset(self):
+        queryset = self.queryset
+        pokemon_ids = self.request.GET.getlist('pokemon__in')
+        if pokemon_ids:
+            queryset = queryset.filter(pokemon__id__in=pokemon_ids)
+        return queryset
+
     def get_serializer_class(self):
         if self.action == 'create':
             return CaughtPokemonCreateSerializer
