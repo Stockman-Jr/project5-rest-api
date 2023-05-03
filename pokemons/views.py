@@ -1,27 +1,10 @@
 from .serializers import *
-from django_filters.rest_framework import (
-    DjangoFilterBackend, FilterSet, CharFilter
-    )
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_api.permissions import IsOwnerOrReadOnly
 from rest_api.pagination import CustomPokemonPagination
 from .models import Pokemon, CaughtPokemon, Nature, HeldItem
 from rest_framework import permissions, viewsets, filters
 from rest_framework.response import Response
-
-
-class CustomPokemonFilter(FilterSet):
-    uncaught_pokemons = CharFilter(
-        method='filter_uncaught_pokemons', lookup_expr='exact'
-        )
-
-    class Meta:
-        model = Pokemon
-        fields = ('uncaught_pokemons', 'types__name', 'pokemons__owner')
-
-    def filter_uncaught_pokemons(self, queryset, name, value):
-        if value.lower() == 'true' and self.request.user.is_authenticated:
-            return queryset.filter(pokemons__owner__isnull=True)
-        return queryset
 
 
 class NatureViewSet(viewsets.ReadOnlyModelViewSet):
@@ -47,7 +30,10 @@ class PokemonViewSet(viewsets.ModelViewSet):
         filters.SearchFilter,
         DjangoFilterBackend,
     ]
-    filterset_class = CustomPokemonFilter
+    filterset_fields = [
+        'types__name',
+        'pokemons__owner'
+    ]
 
     search_fields = [
         'name',
@@ -63,6 +49,7 @@ class PokemonViewSet(viewsets.ModelViewSet):
 class AddCaughtPokemonView(viewsets.ModelViewSet):
     queryset = CaughtPokemon.objects.all().order_by('-created_at')
     serializer_class = CaughtPokemonSerializer
+    pagination_class = CustomPokemonPagination
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [
         filters.OrderingFilter,
@@ -94,10 +81,11 @@ class AddCaughtPokemonView(viewsets.ModelViewSet):
         return super(AddCaughtPokemonView, self).get_permissions()
 
     def get_queryset(self):
-        queryset = self.queryset
-        pokemon_ids = self.request.GET.getlist('pokemon__in')
+        queryset = self.request.user.caughtpokemon_set.all()
+        pokemon_ids = self.request.GET.get('pokemon_ids')
         if pokemon_ids:
-            queryset = queryset.filter(pokemon__id__in=pokemon_ids)
+            pokemon_ids_list = pokemon_ids.split(',')
+            queryset = queryset.filter(pokemon__id__in=pokemon_ids_list)
         return queryset
 
     def get_serializer_class(self):
