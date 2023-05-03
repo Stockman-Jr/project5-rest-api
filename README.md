@@ -31,8 +31,9 @@ Live link can be found [here](https://pokeproject-api.herokuapp.com/).
 This project was created with two repositories, the separate being the frontend.
 Links to the frontend parts of the project can be found in the links below:
 
-[Frontend Repo](https://github.com/Stockman-Jr/mews-tavern)
-[Live Link](https://mews-tavern.herokuapp.com/)
+- [Frontend Repo](https://github.com/Stockman-Jr/mews-tavern)
+
+- [Live Link](https://mews-tavern.herokuapp.com/)
 
 ---
 
@@ -61,7 +62,7 @@ I used and InheritanceManager for the BasePost model using a library called djan
 
 The Post model is used for creating posts that contains game related content, for example sharing screenshots or fan art.
 
-The PokemonBuild model is for creating posts where users can select from the pokémons they own  to create a build from the selected pokémon.
+The PokemonBuild model is for creating posts where users can select from the pokémons they own to create a build from the selected pokémon.
 
 
 ---
@@ -152,8 +153,8 @@ Manual testing was done throughout the developement of the project to make sure 
 | Users that are the owner of the comment can delete it.        | Comment Owner     | Delete             | Pass       |
 | Users that are not the owner of the comment cannot delete it. | Not Comment Owner | Delete             | Pass       |
 
-## Automated Testing
-
+#### **Python PEP8**
+  - All files have been checked and no errors were found with pep8 in gitpod
 ---
 
 ## Technologies Used

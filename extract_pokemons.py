@@ -10,7 +10,9 @@ pokemon_list = []
 ITERATOR = 1
 
 while True:
-    poke_response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{ITERATOR}")
+    poke_response = requests.get(
+        f"https://pokeapi.co/api/v2/pokemon/{ITERATOR}"
+        )
 
     if poke_response.status_code != 200:
         print("No more pokemons!")

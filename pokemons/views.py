@@ -81,11 +81,13 @@ class AddCaughtPokemonView(viewsets.ModelViewSet):
         return super(AddCaughtPokemonView, self).get_permissions()
 
     def get_queryset(self):
-        queryset = self.request.user.caughtpokemon_set.all()
+        queryset = CaughtPokemon.objects.all()
         pokemon_ids = self.request.GET.get('pokemon_ids')
         if pokemon_ids:
             pokemon_ids_list = pokemon_ids.split(',')
-            queryset = queryset.filter(pokemon__id__in=pokemon_ids_list)
+            queryset = CaughtPokemon.objects.filter(
+                pokemon__id__in=pokemon_ids_list
+                )
         return queryset
 
     def get_serializer_class(self):
