@@ -67,6 +67,7 @@ DEBUG = 'DEV' in os.environ
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOST'),
     'localhost',
+    '127.0.0.1'
 ]
 
 if 'CLIENT_ORIGIN' in os.environ:
@@ -161,7 +162,10 @@ if 'DEV' in os.environ:
      }
 else:
     DATABASES = {
-         'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+        'default': dj_database_url.config(
+            default=os.environ.get("DATABASE_URL"),
+            ssl_require=True
+        )
      }
 
 
